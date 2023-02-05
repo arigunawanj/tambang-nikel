@@ -321,7 +321,7 @@
         
         }
         
-        $.getJSON("http://127.0.0.1:8000/datariwayat", addData);
+        $.getJSON("/datariwayat", addData);
         
         }
 </script>

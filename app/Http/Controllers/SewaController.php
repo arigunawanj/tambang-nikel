@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Driver;
-use App\Models\Kendaraan;
-use App\Models\Riwayat;
+use Carbon\Carbon;
 use App\Models\Sewa;
+use App\Models\Driver;
+use App\Models\Riwayat;
+use App\Models\Activity;
+use App\Models\Kendaraan;
+use App\Exports\SewaExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 class SewaController extends Controller
@@ -53,14 +58,24 @@ class SewaController extends Controller
             'penyetuju_2' => 'required',
         ]);
 
+        $kendaraan = Kendaraan::find($request->kendaraan_id);
+
         if ($validator->fails()) {
             return redirect('sewa')->with('error', 'Gagal Tambah Sewa');
         } elseif($request->penyetuju_1 == $request->penyetuju_2) {
             return redirect('sewa')->with('error', 'Penyetuju tidak boleh sama !');
+        } elseif($kendaraan->status == 1) {
+            return redirect('sewa')->with('error', 'Kendaraan Sudah disewakan !');
         } else {
             $data['acc_1'] = 0;
             $data['acc_2'] = 0;
             Sewa::create($data);
+            Activity::create([
+                'nama' => 'Sewa Kendaraan dibuat',
+                'deskripsi' => 'Sewa Kendaraan dari Kendaraan ' . $request->kendaraan_id . ' berhasil dibuat',
+                'user_id' => Auth::user()->id,
+                'waktu' => Carbon::now(),
+            ]);
             return redirect('sewa')->with('success', 'Berhasil Tambah Sewa Kendaraan');
         }
     }
@@ -108,6 +123,12 @@ class SewaController extends Controller
     public function destroy(Sewa $sewa)
     {
         $sewa->delete();
+        Activity::create([
+            'nama' => 'Sewa Kendaraan dihapus',
+            'deskripsi' => 'Sewa Kendaraan berhasil dihapus',
+            'user_id' => Auth::user()->id,
+            'waktu' => Carbon::now(),
+        ]);
         return redirect('sewa')->with('success', 'Berhasil Hapus Data Sewa');
     }
 
@@ -117,10 +138,17 @@ class SewaController extends Controller
             $sewa->update([
                 'acc_1' => 1,
             ]);
+            Activity::create([
+                'nama' => 'Sewa Kendaraan disetujui',
+                'deskripsi' => 'Sewa disetujui oleh ' . Auth::user()->nama,
+                'user_id' => Auth::user()->id,
+                'waktu' => Carbon::now(),
+            ]);
         } else {
             $sewa->update([
                 'acc_1' => 0,
             ]);
+            
         }
         return redirect('sewa')->with('success', 'Data Berhasil disetujui');
     }
@@ -140,6 +168,13 @@ class SewaController extends Controller
                     'status' => 0,
                 ]);
 
+                Activity::create([
+                    'nama' => 'Sewa Kendaraan disetujui',
+                    'deskripsi' => 'Sewa disetujui oleh ' . Auth::user()->nama ,
+                    'user_id' => Auth::user()->id,
+                    'waktu' => Carbon::now(),
+                ]);
+
                 $kendaraan->update([
                     'status' => 1,
                 ]);
@@ -152,5 +187,10 @@ class SewaController extends Controller
         } else {
         return redirect('sewa')->with('error', 'Menunggu Disetujui Pihak 1');
         }
+    }
+
+    public function sewaExport() 
+    {
+        return Excel::download(new SewaExport, 'SewaExport.xlsx');
     }
 }

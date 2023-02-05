@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\DriverExport;
+use Carbon\Carbon;
 use App\Models\Driver;
+use App\Models\Activity;
 use Illuminate\Http\Request;
+use App\Exports\DriverExport;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -49,6 +52,13 @@ class DriverController extends Controller
             return redirect('driver')->with('error', 'Gagal Tambah Driver');
         } else {
             Driver::create($request->all());
+            Activity::create([
+                'nama' => 'Data Driver dibuat',
+                'deskripsi' => 'Data Driver dari ' . $request->nama_driver . ' berhasil dibuat',
+                'user_id' => Auth::user()->id,
+                'waktu' => Carbon::now(),
+            ]);
+
             return redirect('driver')->with('success', 'Berhasil Tambah Driver');
         }
     }
@@ -94,6 +104,12 @@ class DriverController extends Controller
             return redirect('driver')->with('error', 'Gagal Ubah Data Driver');
         } else {
             $driver->update($request->all());
+            Activity::create([
+                'nama' => 'Data Driver diupdate',
+                'deskripsi' => 'Data Driver dari ' . $request->nama_driver . ' berhasil diupdate',
+                'user_id' => Auth::user()->id,
+                'waktu' => Carbon::now(),
+            ]);
             return redirect('driver')->with('success', 'Berhasil Ubah Data Driver');
         }
     }
@@ -107,6 +123,12 @@ class DriverController extends Controller
     public function destroy(Driver $driver)
     {
         $driver->delete();
+        Activity::create([
+            'nama' => 'Data Driver dibuat',
+            'deskripsi' => 'Data Driver dari berhasil dihapus',
+            'user_id' => Auth::user()->id,
+            'waktu' => Carbon::now(),
+        ]);
         return redirect('driver')->with('success', 'Berhasil Hapus Data Driver');
     }
 

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Activity;
 use App\Models\Kendaraan;
 use Illuminate\Http\Request;
 use App\Exports\KendaraanExport;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -51,6 +54,12 @@ class KendaraanController extends Controller
             return redirect('kendaraan')->with('error', 'Gagal Tambah Kendaraan');
         } else {
             Kendaraan::create($request->all());
+            Activity::create([
+                'nama' => 'Data Kendaraan dibuat',
+                'deskripsi' => 'Data Kendaraan '. $request->nama_kendaraan . ' berhasil dibuat' ,
+                'user_id' => Auth::user()->id,
+                'waktu' => Carbon::now(),
+            ]);
             return redirect('kendaraan')->with('success', 'Berhasil Tambah Kendaraan');
         }
     }
@@ -98,6 +107,12 @@ class KendaraanController extends Controller
             return redirect('kendaraan')->with('error', 'Gagal Ubah Kendaraan');
         } else {
             $kendaraan->update($request->all());
+            Activity::create([
+                'nama' => 'Data Kendaraan diubah',
+                'deskripsi' => 'Data Kendaraan dengan ID ' . $kendaraan->id . ' berhasil diubah' ,
+                'user_id' => Auth::user()->id,
+                'waktu' => Carbon::now(),
+            ]);
             return redirect('kendaraan')->with('success', 'Berhasil Ubah Kendaraan');
         }
     }
@@ -111,6 +126,12 @@ class KendaraanController extends Controller
     public function destroy(Kendaraan $kendaraan)
     {
         $kendaraan->delete();
+        Activity::create([
+            'nama' => 'Data Kendaraan dihapus',
+            'deskripsi' => 'Data Kendaraan berhasil dihapus' ,
+            'user_id' => Auth::user()->id,
+            'waktu' => Carbon::now(),
+        ]);
         return redirect('kendaraan')->with('success', 'Berhasil Hapus Data Kendaraan');
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Models\Riwayat;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -46,11 +47,13 @@ Route::middleware(['auth'])->group(function () {
         // Print
         Route::get('driverexport', [DriverController::class, 'driverExport']);
         Route::get('kendaraanexport', [KendaraanController::class, 'kendaraanExport']);
+        Route::get('sewaexport', [SewaController::class, 'sewaExport']);
 });
 
 // Akses Role Control
 Route::middleware(['auth','Control'])->group(function () {
     Route::resource('user', UserController::class);
+    Route::resource('activity', ActivityController::class);
 });
 
 Auth::routes();

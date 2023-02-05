@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Riwayat;
+use App\Models\Activity;
 use App\Models\Kendaraan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class RiwayatController extends Controller
@@ -84,6 +87,12 @@ class RiwayatController extends Controller
     public function destroy(Riwayat $riwayat)
     {
         $riwayat->delete();
+        Activity::create([
+            'nama' => 'Riwayat berhasil dihapus',
+            'deskripsi' => 'Riwayat berhasil dihapus',
+            'user_id' => Auth::user()->id,
+            'waktu' => Carbon::now(),
+        ]);
         return redirect('riwayat')->with('success', 'Berhasil Hapus Riwayat Peminjaman');
     }
 
@@ -98,11 +107,17 @@ class RiwayatController extends Controller
                 'status' => 0,
             ]);
 
+            Activity::create([
+                'nama' => 'Riwayat Pemakaian selesai',
+                'deskripsi' => 'Riwayat Pemakaian Kendaraan telah selesai' ,
+                'user_id' => Auth::user()->id,
+                'waktu' => Carbon::now(),
+            ]);
         } else {
             $riwayat->update([
                 'status' => 0,
             ]);
         }
-        return redirect('riwayat')->with('success', 'Data Berhasil disetujui');
+        return redirect('riwayat')->with('success', 'Pemakaian telah selesai');
     }
 }

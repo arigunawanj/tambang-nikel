@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Activity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -40,6 +43,12 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = Hash::make($request->password);
         User::create($data);
+        Activity::create([
+            'nama' => 'Data Pengguna dibuat',
+            'deskripsi' => 'Data Pengguna berhasil dibuat' ,
+            'user_id' => Auth::user()->id,
+            'waktu' => Carbon::now(),
+        ]);
         return redirect('user')->with('success', 'Berhasil Menambahkan Data Pengguna');
     }
 
@@ -78,6 +87,12 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
+        Activity::create([
+            'nama' => 'Role Data Pengguna diubah',
+            'deskripsi' => 'Role Data Pengguna ' . $user->name . ' berhasil diganti ke ' . $request->role ,
+            'user_id' => Auth::user()->id,
+            'waktu' => Carbon::now(),
+        ]);
         // Dialihkan ke halaman Pengguna
         return redirect('user')->with('success', 'Berhasil Ubah Role Pengguna');
     }
@@ -91,6 +106,12 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+        Activity::create([
+            'nama' => 'Data Pengguna dihapus',
+            'deskripsi' => 'Data Pengguna berhasil dihapus' ,
+            'user_id' => Auth::user()->id,
+            'waktu' => Carbon::now(),
+        ]);
         return redirect('user')->with('success', 'Berhasil Hapus Data Pengguna');
     }
 }

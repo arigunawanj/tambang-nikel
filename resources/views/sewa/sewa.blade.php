@@ -11,6 +11,7 @@
         </button>
         
     @endif
+    <a href="/sewaexport" class="btn btn-warning mb-3"><i class="fa-solid fa-print"></i> Cetak Data</a>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
