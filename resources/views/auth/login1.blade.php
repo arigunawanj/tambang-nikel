@@ -81,6 +81,12 @@
                                     </form>
                                     <hr>
                                     <div class="text-center">
+                                            <a class="small" href="/register">
+                                                Belum Punya Akun ? Daftar Disini
+                                            </a>
+
+                                    </div>
+                                    <div class="text-center">
                                         @if (Route::has('password.request'))
                                             <a class="small" href="{{ route('password.request') }}">
                                                 Lupa Password ?

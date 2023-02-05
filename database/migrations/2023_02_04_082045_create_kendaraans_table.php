@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('konsumsi_bbm');
             $table->date('jadwal');
             $table->string('asal');
-            $table->boolean('status');
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

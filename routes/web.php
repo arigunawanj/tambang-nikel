@@ -22,12 +22,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('auth.login1');
 });
-
-Route::resource('driver', DriverController::class);
-Route::resource('kendaraan', KendaraanController::class);
-Route::resource('user', UserController::class);
-Route::resource('riwayat', RiwayatController::class);
-Route::resource('sewa', SewaController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('driver', DriverController::class);
+    Route::resource('kendaraan', KendaraanController::class);
+    Route::resource('user', UserController::class);
+    Route::resource('riwayat', RiwayatController::class);
+    Route::resource('sewa', SewaController::class);
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    
+});
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

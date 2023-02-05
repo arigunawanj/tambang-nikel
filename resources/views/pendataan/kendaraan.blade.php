@@ -58,20 +58,28 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ route('driver.update', $item->id) }}" method="POST">
+                                            <form action="{{ route('kendaraan.update', $item->id) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="form-group">
-                                                    <label>Nama Driver</label>
-                                                    <input type="text" class="form-control" value="{{ $item->nama_driver }}" name="nama_driver">
+                                                    <label>Nama Kendaraan</label>
+                                                    <input type="text" class="form-control" value="{{ $item->nama_kendaraan }}" name="nama_kendaraan">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Alamat Driver</label>
-                                                    <input type="text" class="form-control" value="{{ $item->alamat_driver }}" name="alamat_driver">
+                                                    <label>Jenis</label>
+                                                    <input type="text" class="form-control" value="{{ $item->jenis }}" name="jenis">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Telepon Distributor</label>
-                                                    <input type="text" class="form-control" value="{{ $item->telepon_driver }}" name="telepon_driver">
+                                                    <label>Konsumsi BBM</label>
+                                                    <input type="text" class="form-control" value="{{ $item->konsumsi_bbm }}" name="konsumsi_bbm">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Jadwal</label>
+                                                    <input type="date" class="form-control" value="{{ $item->jadwal }}" name="jadwal">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Asal</label>
+                                                    <input type="text" class="form-control" value="{{ $item->asal }}" name="asal">
                                                 </div>
                                                 <button type="submit" class="btn btn-primary">Submit</button>
                                             </form>
@@ -91,7 +99,7 @@
                                                 <span aria-hidden="true">×</span>
                                             </button>
                                         </div>
-                                        <form action="{{ route('driver.destroy', $item->id) }}" method="POST">
+                                        <form action="{{ route('kendaraan.destroy', $item->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <div class="modal-body">
@@ -125,19 +133,27 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="POST">
+                    <form action="{{ route('kendaraan.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label>Nama Driver</label>
-                            <input type="text" class="form-control" name="nama_driver">
+                            <label>Nama Kendaraan</label>
+                            <input type="text" class="form-control" name="nama_kendaraan">
                         </div>
                         <div class="form-group">
-                            <label>Alamat Driver</label>
-                            <input type="text" class="form-control" name="alamat_driver">
+                            <label>Jenis</label>
+                            <input type="text" class="form-control" name="jenis">
                         </div>
                         <div class="form-group">
-                            <label>Telepon Driver</label>
-                            <input type="text" class="form-control" name="telepon_driver">
+                            <label>Konsumsi BBM</label>
+                            <input type="text" class="form-control" name="konsumsi_bbm">
+                        </div>
+                        <div class="form-group">
+                            <label>Jadwal</label>
+                            <input type="date" class="form-control" name="jadwal">
+                        </div>
+                        <div class="form-group">
+                            <label>Asal</label>
+                            <input type="text" class="form-control" name="asal">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
