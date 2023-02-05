@@ -23,6 +23,11 @@
     <!-- Custom styles for this page -->
     <link href="{{ asset('data/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+
 
 </head>
 
@@ -276,16 +281,20 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('data/js/demo/datatables-demo.js') }}"></script>
     <script src="{{ asset('data/js/harga.js') }}"></script>
-    
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
-<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
     <script>
         @if (Session::has('success'))
             toastr.success("{{ Session::get('success') }}")
         @elseif (Session::has('error'))
             toastr.error("{{ Session::get('error') }}")
         @endif
+    </script>
+    <script>
+        $("#tanggal").flatpickr({
+            dateFormat: "Y-m-d",
+        });
     </script>
     <script>
         window.onload = function() {
@@ -305,7 +314,7 @@
             },
             data: [{
                 type: "column",
-                yValueFormatString: "#,### Terpakai",
+                yValueFormatString: "# Terpakai",
                 dataPoints: dataPoints
             }]
         });

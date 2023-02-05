@@ -82,6 +82,6 @@ class ActivityController extends Controller
     public function destroy(Activity $activity)
     {
         $activity->delete();
-        return redirect('activity');
+        return redirect('activity')->with('success', 'Berhasil Hapus Aktivitas');
     }
 }

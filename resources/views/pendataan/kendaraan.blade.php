@@ -23,7 +23,7 @@
                             <th>Nama Kendaraan</th>
                             <th>Jenis</th>
                             <th>Konsumsi BBM</th>
-                            <th>Jadwal</th>
+                            <th>Jadwal Maintenance</th>
                             <th>Asal</th>
                             <th>Status</th>
                             <th>Aksi</th>
@@ -35,8 +35,13 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_kendaraan }}</td>
                                 <td>{{ $item->jenis }}</td>
-                                <td>{{ $item->konsumsi_bbm }}</td>
-                                <td>{{ $item->jadwal }}</td>
+                                <td>Rp {{ number_format("$item->konsumsi_bbm", 0, ',', '.') }}</td>
+                                @php
+                                    setlocale(LC_ALL, 'IND');
+                                    $tanggal = date_create($item->jadwal);
+                                    $data =  \Carbon\Carbon::parse($tanggal)->formatLocalized('%d %B %Y');
+                                @endphp
+                                <td>{{ $data }}</td>
                                 <td>{{ $item->asal }}</td>
                                 @if ($item->status == 0)
                                     <td><span class="badge badge-warning">Tersedia</span></td>
@@ -72,19 +77,35 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Jenis</label>
-                                                    <input type="text" class="form-control" value="{{ $item->jenis }}" name="jenis">
+                                                    <select name="jenis" id="" class="form-control">
+                                                        <option value="" disabled selected>Pilih Jenis...</option>
+                                                        <option value="Angkutan Barang" @if ($item->jenis == 'Angkutan Barang')
+                                                            @selected($item->jenis == 'Angkutan Barang')
+                                                        @endif>Angkutan Barang</option>
+                                                        <option value="Angkutan Orang" @if ($item->jenis == 'Angkutan Barang')
+                                                            @selected($item->jenis == 'Angkutan Orang')
+                                                        @endif>Angkutan Orang</option>
+                                                    </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Konsumsi BBM</label>
                                                     <input type="number" class="form-control" value="{{ $item->konsumsi_bbm }}" name="konsumsi_bbm">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Jadwal</label>
+                                                    <label>Jadwal Maintenance</label>
                                                     <input type="date" class="form-control" value="{{ $item->jadwal }}" name="jadwal">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Asal</label>
-                                                    <input type="text" class="form-control" value="{{ $item->asal }}" name="asal">
+                                                    <select name="asal" id="" class="form-control">
+                                                        <option value="" disabled selected>Pilih Asal...</option>
+                                                        <option value="Perusahaan" @if ($item->asal == 'Perusahaan')
+                                                            @selected($item->asal == 'Perusahaan')
+                                                        @endif>Perusahaan</option>
+                                                        <option value="Penyewaan" @if ($item->asal == 'Penyewaan')
+                                                            @selected($item->asal == 'Penyewaan')
+                                                        @endif>Penyewaan</option>
+                                                    </select>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary">Submit</button>
                                             </form>
@@ -146,19 +167,27 @@
                         </div>
                         <div class="form-group">
                             <label>Jenis</label>
-                            <input type="text" class="form-control" name="jenis">
+                           <select name="jenis" id="" class="form-control">
+                            <option value="" disabled selected>Pilih Jenis...</option>
+                            <option value="Angkutan Barang">Angkutan Barang</option>
+                            <option value="Angkutan Orang">Angkutan Orang</option>
+                           </select>
                         </div>
                         <div class="form-group">
                             <label>Konsumsi BBM</label>
                             <input type="number" class="form-control" name="konsumsi_bbm">
                         </div>
                         <div class="form-group">
-                            <label>Jadwal</label>
-                            <input type="date" class="form-control" name="jadwal">
+                            <label>Jadwal Maintenance</label>
+                            <input type="date" class="form-control" name="jadwal" id="tanggal">
                         </div>
                         <div class="form-group">
                             <label>Asal</label>
-                            <input type="text" class="form-control" name="asal">
+                            <select name="asal" id="" class="form-control">
+                                <option value="" disabled selected>Pilih Asal...</option>
+                                <option value="Perusahaan">Perusahaan</option>
+                                <option value="Penyewaan">Penyewaan</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

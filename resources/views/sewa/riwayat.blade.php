@@ -27,7 +27,12 @@
                         @foreach ($riwayat as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->tanggal_pakai }}</td>
+                                @php
+                                    setlocale(LC_ALL, 'IND');
+                                    $tanggal = date_create($item->tanggal_pakai);
+                                    $data =  \Carbon\Carbon::parse($tanggal)->formatLocalized('%d %B %Y');
+                                @endphp
+                                <td>{{ $data }}</td>
                                 <td>{{ $item->kendaraan->nama_kendaraan }}</td>
                                 @if ($item->status == 0)
                                     @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')

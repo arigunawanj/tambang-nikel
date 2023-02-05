@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Driver;
 use App\Models\Kendaraan;
 use App\Models\Riwayat;
+use App\Models\Sewa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -30,7 +31,8 @@ class HomeController extends Controller
         $kendaraan = Kendaraan::all()->count();
         $driver = Driver::all()->count();
         $riwayat = Riwayat::all()->count();
-        return view('home', compact('kendaraan','driver', 'riwayat'));
+        $sewa = Sewa::all()->count();
+        return view('home', compact('kendaraan','driver', 'riwayat', 'sewa'));
     }
 
     public function chart()

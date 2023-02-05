@@ -26,13 +26,11 @@
                         @foreach ($activity as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->nama }}</td>
+                                <td><span class="badge badge-primary">{{ $item->nama }}</span></td>
                                 <td>{{ $item->deskripsi }}</td>
-                                <td>{{ $item->user->nama }}</td>
+                                <td><span class="badge badge-danger">{{ $item->user->nama }}</span></td>
                                 <td>{{ $item->waktu}}</td>
                                 <td class="d-flex">
-                                    <a href="" class="btn btn-warning" data-toggle="modal"
-                                        data-target="#editData{{ $item->id }}"><i class="fa-solid fa-pen-to-square"></i></a>
                                     <a href="" class="btn btn-danger ml-2" data-toggle="modal"
                                     data-target="#delData{{ $item->id }}"><i class="fa-solid fa-trash"></i></a>
                                 </td>
@@ -49,11 +47,11 @@
                                                 <span aria-hidden="true">×</span>
                                             </button>
                                         </div>
-                                        <form action="{{ route('driver.destroy', $item->id) }}" method="POST">
+                                        <form action="{{ route('activity.destroy', $item->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <div class="modal-body">
-                                                   <p>Apa anda yakin ingin menghapus data <span class="badge badge-danger">{{ $item->nama_driver }}</span> ?</p> 
+                                                   <p>Apa anda yakin ingin menghapus data <span class="badge badge-danger">{{ $item->nama }}</span> ?</p> 
                                                 <div class="modal-footer">
                                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                                                     <button type="submit" class="btn btn-danger">Hapus</button>

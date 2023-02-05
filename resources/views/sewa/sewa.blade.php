@@ -39,7 +39,12 @@
                         @foreach ($sewa as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->tanggal_sewa }}</td>
+                                @php
+                                    setlocale(LC_ALL, 'IND');
+                                    $tanggal = date_create($item->tanggal_sewa);
+                                    $data =  \Carbon\Carbon::parse($tanggal)->formatLocalized('%d %B %Y');
+                                @endphp
+                                <td>{{ $data }}</td>
                                 <td>{{ $item->kendaraan->nama_kendaraan }}</td>
                                 <td>{{ $item->driver->nama_driver}}</td>
                                 @php
@@ -133,7 +138,7 @@
                         @csrf
                         <div class="form-group">
                             <label>Tanggal Sewa</label>
-                            <input type="date" class="form-control" name="tanggal_sewa">
+                            <input type="date" class="form-control" name="tanggal_sewa" id="tanggal">
                         </div>
                         <div class="form-group">
                             <label>Nama Kendaraan</label>

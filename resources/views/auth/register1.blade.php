@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>AMS - Daftar</title>
+    <title>Nikel - Daftar</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('data/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
