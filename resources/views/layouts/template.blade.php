@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>AMS | @yield('title')</title>
+    <title>Tambang Nikel | @yield('title')</title>
 
     <!-- Custom fonts for this template-->
     {{-- <link href="{{ asset('data/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css"> --}}
@@ -22,6 +22,7 @@
     <link href="{{ asset('data/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <!-- Custom styles for this page -->
     <link href="{{ asset('data/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
 
 </head>
 
@@ -38,7 +39,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-landmark"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">AMS <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">Nikel <sup>2</sup></div>
             </a>
 
             <!-- Divider -->
@@ -63,22 +64,18 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-user-secret"></i>
+                    <i class="fa-solid fa-file-waveform"></i>
                     <span>Pendataan</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Pendataan</h6>
-                        <a class="collapse-item {{ request()->is('customer') ? 'active' : '' }}" href="/customer">Data
-                            Customer</a>
-                        <a class="collapse-item {{ request()->is('distributor') ? 'active' : '' }}"
-                            href="/distributor">Data Distributor</a>
-                        <a class="collapse-item {{ request()->is('good') ? 'active' : '' }}" href="/good">Data
-                            Barang</a>
-                            @if (Auth::user()->role == "Owner")
+                        <a class="collapse-item {{ request()->is('kendaraan') ? 'active' : '' }}" href="/kendaraan">Data
+                            Kendaraan</a>
+                        <a class="collapse-item {{ request()->is('driver') ? 'active' : '' }}"
+                            href="/driver">Data Driver</a>
                             <a class="collapse-item {{ request()->is('user') ? 'active' : '' }}" href="/user">Data
                                 Pengguna</a>
-                            @endif
                     </div>
                 </div>
             </li>
@@ -89,38 +86,20 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Admin AMS
+                Sewa
             </div>
 
 
-            <li class="nav-item {{ request()->is('stok') ? 'active' : '' }}">
-                <a class="nav-link" href="/stok">
-                    <i class="fas fa-fw fa-box"></i>
-                    <span>Stok Barang</span></a>
+            <li class="nav-item {{ request()->is('sewa') ? 'active' : '' }}">
+                <a class="nav-link" href="/sewa">
+                    <i class="fa-solid fa-car"></i>
+                    <span>Sewa Kendaraan</span></a>
             </li>
-            <li class="nav-item {{ request()->is('selling') ? 'active' : '' }}">
-                <a class="nav-link" href="/selling">
-                    <i class="fas fa-fw fa-wallet"></i>
-                    <span>Penjualan</span></a>
+            <li class="nav-item {{ request()->is('riwayat') ? 'active' : '' }}">
+                <a class="nav-link" href="/riwayat">
+                    <i class="fa-solid fa-clone"></i>
+                    <span>Riwayat Peminjaman</span></a>
             </li>
-
-            <li class="nav-item {{ request()->is('deposit') ? 'active' : '' }}">
-                <a class="nav-link" href="/deposit">
-                    <i class="fas fa-fw fa-envelope"></i>
-                    <span>Setoran</span></a>
-            </li>
-
-            <li class="nav-item {{ request()->is('invoice') ? 'active' : '' }}">
-                <a class="nav-link" href="/invoice">
-                    <i class="fas fa-fw fa-file-excel"></i>
-                    <span>Faktur</span></a>
-            </li>
-            <li class="nav-item {{ request()->is('report') ? 'active' : '' }}">
-                <a class="nav-link" href="/report">
-                    <i class="fas fa-fw fa-book"></i>
-                    <span>Laporan Faktur Pajak</span></a>
-            </li>
-
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -189,11 +168,6 @@
                                 aria-labelledby="userDropdown">
 
                                 <a class="dropdown-item" href="#" data-toggle="modal"
-                                    data-target="#">
-                                    <i class="fas fa-user-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profil
-                                </a>
-                                <a class="dropdown-item" href="#" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -221,7 +195,9 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Ari Gunawan Jatmiko &copy; AMS 2023</span>
+                        <span>Ari Gunawan Jatmiko &copy; Tambang Nikel @php
+                            $tahun = date('Y');
+                        @endphp {{ $tahun }}</span>
                     </div>
                 </div>
             </footer>
@@ -279,6 +255,7 @@
 
     <!-- Page level plugins -->
     <script src="{{ asset('data/vendor/chart.js/Chart.min.js') }}"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <!-- Page level plugins -->
     <script src="{{ asset('data/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('data/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
@@ -289,7 +266,13 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('data/js/demo/datatables-demo.js') }}"></script>
     <script src="{{ asset('data/js/harga.js') }}"></script>
-    
+    <script>
+        @if (Session::has('success'))
+            toastr.success("{{ Session::get('success') }}")
+        @elseif (Session::has('error'))
+            toastr.error("{{ Session::get('error') }}")
+        @endif
+    </script>
 </body>
 
 </html>

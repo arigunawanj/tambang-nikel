@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sewa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SewaController extends Controller
 {
@@ -14,7 +15,8 @@ class SewaController extends Controller
      */
     public function index()
     {
-        //
+        $sewa = Sewa::all();
+        return view('sewa.sewa', compact('sewa'));
     }
 
     /**
@@ -35,7 +37,22 @@ class SewaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'tanggal_sewa' => 'required',
+            'kendaraan_id' => 'required',
+            'driver_id' => 'required',
+            'penyetuju_1' => 'required',
+            'penyetuju_2' => 'required',
+            'acc1' => 'required',
+            'acc2' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('kendaraan')->with('error', 'Gagal Tambah Kendaraan');
+        } else {
+            Sewa::create($request->all());
+            return redirect('kendaraan')->with('success', 'Berhasil Tambah Kendaraan');
+        }
     }
 
     /**
@@ -80,6 +97,7 @@ class SewaController extends Controller
      */
     public function destroy(Sewa $sewa)
     {
-        //
+        $sewa->delete();
+        return redirect('sewa')->with('success', 'Berhasil Hapus Data Driver');
     }
 }

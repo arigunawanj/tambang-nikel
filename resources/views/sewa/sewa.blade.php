@@ -1,0 +1,150 @@
+@extends('layouts.template')
+
+@section('title', 'Sewa Kendaraan')
+
+@section('main')
+    <h1 class="h3 mb-2 text-gray-800">Sewa Kendaraan</h1>
+
+    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
+        <i class="fas fa-fw fa-plus fa-beat-fade"></i> Tambah Data
+    </button>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Sewa Kendaraan</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal Sewa</th>
+                            <th>Nama Kendaraan</th>
+                            <th>Nama Driver</th>
+                            <th>Penyetuju 1</th>
+                            <th>Penyetuju 2</th>
+                            <th>Acc 1</th>
+                            <th>Acc 2</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($sewa as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->tanggal_sewa }}</td>
+                                <td>{{ $item->kendaraan_id }}</td>
+                                <td>{{ $item->driver_id}}</td>
+                                <td>{{ $item->penyetuju_1 }}</td>
+                                <td>{{ $item->penyetuju_2 }}</td>
+                                <td>{{ $item->acc_1 }}</td>
+                                <td>{{ $item->acc_2 }}</td>
+                                <td class="d-flex">
+                                    <a href="" class="btn btn-warning" data-toggle="modal"
+                                        data-target="#editData{{ $item->id }}"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a href="" class="btn btn-danger ml-2" data-toggle="modal"
+                                    data-target="#delData{{ $item->id }}"><i class="fa-solid fa-trash"></i></a>
+                                </td>
+
+                            </tr>
+                            <!-- Modal -->
+                            <div class="modal fade" id="editData{{ $item->id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Edit Sewa Kendaraan</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('driver.update', $item->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="form-group">
+                                                    <label>Nama Driver</label>
+                                                    <input type="text" class="form-control" value="{{ $item->nama_driver }}" name="nama_driver">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Alamat Driver</label>
+                                                    <input type="text" class="form-control" value="{{ $item->alamat_driver }}" name="alamat_driver">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Telepon Distributor</label>
+                                                    <input type="text" class="form-control" value="{{ $item->telepon_driver }}" name="telepon_driver">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                              <!-- Modal Edit Akhir-->
+                             <!-- Modal Delete-->
+                                <div class="modal fade" id="delData{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Ingin menghapus Data ?</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <form action="{{ route('driver.destroy', $item->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <div class="modal-body">
+                                                   <p>Apa anda yakin ingin menghapus data <span class="badge badge-danger">{{ $item->nama_driver }}</span> ?</p> 
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-danger">Hapus</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal Akhir Delete-->
+                           @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Sewa Kendaraan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label>Nama Driver</label>
+                            <input type="text" class="form-control" name="nama_driver">
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat Driver</label>
+                            <input type="text" class="form-control" name="alamat_driver">
+                        </div>
+                        <div class="form-group">
+                            <label>Telepon Driver</label>
+                            <input type="text" class="form-control" name="telepon_driver">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

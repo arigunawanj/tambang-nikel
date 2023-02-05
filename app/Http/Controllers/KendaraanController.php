@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class KendaraanController extends Controller
 {
@@ -14,7 +15,8 @@ class KendaraanController extends Controller
      */
     public function index()
     {
-        //
+        $kendaraan = Kendaraan::all();
+        return view('pendataan.kendaraan', compact('kendaraan'));
     }
 
     /**
@@ -35,7 +37,21 @@ class KendaraanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nama_kendaraan' => 'required',
+            'jenis' => 'required',
+            'konsumsi_bbm' => 'required',
+            'jadwal' => 'required',
+            'asal' => 'required',
+            'status' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('kendaraan')->with('error', 'Gagal Tambah Kendaraan');
+        } else {
+            Kendaraan::create($request->all());
+            return redirect('kendaraan')->with('success', 'Berhasil Tambah Kendaraan');
+        }
     }
 
     /**
@@ -69,7 +85,21 @@ class KendaraanController extends Controller
      */
     public function update(Request $request, Kendaraan $kendaraan)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nama_kendaraan' => 'required',
+            'jenis' => 'required',
+            'konsumsi_bbm' => 'required',
+            'jadwal' => 'required',
+            'asal' => 'required',
+            'status' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('kendaraan')->with('error', 'Gagal Ubah Kendaraan');
+        } else {
+            $kendaraan->update($request->all());
+            return redirect('kendaraan')->with('success', 'Berhasil Ubah Kendaraan');
+        }
     }
 
     /**
@@ -80,6 +110,7 @@ class KendaraanController extends Controller
      */
     public function destroy(Kendaraan $kendaraan)
     {
-        //
+        $kendaraan->delete();
+        return redirect('kendaraan')->with('success', 'Berhasil Hapus Data Kendaraan');
     }
 }

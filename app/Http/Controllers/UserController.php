@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Riwayat;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
-class RiwayatController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class RiwayatController extends Controller
      */
     public function index()
     {
-        $riwayat = Riwayat::all();
-        return view('sewa.riwayat', compact('riwayat'));
+        $user = User::all();
+        return view('pendataan.pengguna', compact('user'));
     }
 
     /**
@@ -37,28 +37,19 @@ class RiwayatController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'tanggal_pakai' => 'required',
-            'kendaraan_id' => 'required',
-            'sewa_id' => 'required',
-            'status' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect('kendaraan')->with('error', 'Gagal Tambah Kendaraan');
-        } else {
-            Riwayat::create($request->all());
-            return redirect('kendaraan')->with('success', 'Berhasil Tambah Kendaraan');
-        }
+        $data = $request->all();
+        $data['password'] = Hash::make($request->password);
+        User::create($data);
+        return redirect('user')->with('success', 'Berhasil Menambahkan Data Pengguna');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Riwayat  $riwayat
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Riwayat $riwayat)
+    public function show($id)
     {
         //
     }
@@ -66,10 +57,10 @@ class RiwayatController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Riwayat  $riwayat
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Riwayat $riwayat)
+    public function edit($id)
     {
         //
     }
@@ -78,10 +69,10 @@ class RiwayatController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Riwayat  $riwayat
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Riwayat $riwayat)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -89,12 +80,12 @@ class RiwayatController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Riwayat  $riwayat
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Riwayat $riwayat)
+    public function destroy(User $user)
     {
-        $riwayat->delete();
-        return redirect('riwayat')->with('success', 'Berhasil Hapus Data Driver');
+        $user->delete();
+        return redirect('user')->with('success', 'Berhasil Hapus Data Pengguna');
     }
 }

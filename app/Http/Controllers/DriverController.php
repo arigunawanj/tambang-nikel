@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Driver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DriverController extends Controller
 {
@@ -14,7 +15,8 @@ class DriverController extends Controller
      */
     public function index()
     {
-        //
+        $driver = Driver::all();
+        return view('pendataan.driver', compact('driver'));
     }
 
     /**
@@ -35,7 +37,18 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nama_driver' => 'required',
+            'alamat_driver' => 'required',
+            'telepon_driver' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('driver')->with('error', 'Gagal Tambah Driver');
+        } else {
+            Driver::create($request->all());
+            return redirect('driver')->with('success', 'Berhasil Tambah Driver');
+        }
     }
 
     /**
@@ -69,7 +82,18 @@ class DriverController extends Controller
      */
     public function update(Request $request, Driver $driver)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nama_driver' => 'required',
+            'alamat_driver' => 'required',
+            'telepon_driver' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('driver')->with('error', 'Gagal Ubah Data Driver');
+        } else {
+            $driver->update($request->all());
+            return redirect('driver')->with('success', 'Berhasil Ubah Data Driver');
+        }
     }
 
     /**
@@ -80,6 +104,7 @@ class DriverController extends Controller
      */
     public function destroy(Driver $driver)
     {
-        //
+        $driver->delete();
+        return redirect('driver')->with('success', 'Berhasil Hapus Data Driver');
     }
 }
