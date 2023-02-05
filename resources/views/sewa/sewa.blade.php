@@ -5,9 +5,12 @@
 @section('main')
     <h1 class="h3 mb-2 text-gray-800">Sewa Kendaraan</h1>
 
-    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
-        <i class="fas fa-fw fa-plus fa-beat-fade"></i> Tambah Data
-    </button>
+    @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
+        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
+            <i class="fas fa-fw fa-plus fa-beat-fade"></i> Tambah Data
+        </button>
+        
+    @endif
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -26,7 +29,9 @@
                             <th>Penyetuju 2</th>
                             <th>Acc 1</th>
                             <th>Acc 2</th>
+                            @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
                             <th>Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -69,10 +74,12 @@
                                 @else
                                     <td><span class="badge badge-warning">Disetujui</span></td>
                                 @endif
+                                @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
                                 <td class="d-flex">
                                     <a href="" class="btn btn-danger ml-2" data-toggle="modal"
                                     data-target="#delData{{ $item->id }}"><i class="fa-solid fa-trash"></i></a>
                                 </td>
+                                @endif
 
                             </tr>
                            

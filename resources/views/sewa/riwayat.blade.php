@@ -18,7 +18,9 @@
                             <th>Tanggal Pakai</th>
                             <th>Nama Kendaraan</th>
                             <th>Status</th>
-                            <th>Aksi</th>
+                            @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
+                                <th>Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -28,14 +30,20 @@
                                 <td>{{ $item->tanggal_pakai }}</td>
                                 <td>{{ $item->kendaraan->nama_kendaraan }}</td>
                                 @if ($item->status == 0)
-                                    <td><a href="sewakan/{{ $item->id }}" class="badge badge-success">Disewakan</a></td>
+                                    @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
+                                        <td><a href="sewakan/{{ $item->id }}" class="badge badge-success">Disewakan</a></td>
+                                    @else
+                                        <td><span class="badge badge-success">Disewakan</span></td>
+                                    @endif
                                 @else
                                     <td><span class="badge badge-info">Selesai disewakan</span></td>
                                 @endif
+                                @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
                                 <td class="d-flex">
                                     <a href="" class="btn btn-danger ml-2" data-toggle="modal"
                                     data-target="#delData{{ $item->id }}"><i class="fa-solid fa-trash"></i></a>
                                 </td>
+                                @endif
 
                             </tr>
                             

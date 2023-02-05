@@ -5,9 +5,11 @@
 @section('main')
     <h1 class="h3 mb-2 text-gray-800">Data Driver</h1>
 
-    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
-        <i class="fas fa-fw fa-plus fa-beat-fade"></i> Tambah Data
-    </button>
+    @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
+        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
+            <i class="fas fa-fw fa-plus fa-beat-fade"></i> Tambah Data
+        </button>
+    @endif
     <a href="/driverexport" class="btn btn-warning mb-3"><i class="fa-solid fa-print"></i> Cetak Data</a>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">

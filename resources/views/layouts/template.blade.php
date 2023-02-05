@@ -17,7 +17,7 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-    <link rel="icon" href="">
+    <link rel="icon" href="{{ asset('data/img/undraw_rocket.svg') }}">
     <!-- Custom styles for this template-->
     <link href="{{ asset('data/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <!-- Custom styles for this page -->
@@ -52,12 +52,15 @@
                     <span>Beranda</span></a>
             </li>
             <li class="nav-item {{ request()->is('activity') ? 'active' : '' }}">
+                @if (Auth::user()->role == 'Control')
                 <a class="nav-link" href="/activity">
                     <i class="fa-solid fa-shoe-prints"></i>
                     <span>Log Aktivitas</span></a>
+                @endif
             </li>
 
             <!-- Divider -->
+            @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
             <hr class="sidebar-divider">
 
             <!-- Heading -->
@@ -66,24 +69,27 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa-solid fa-file-waveform"></i>
-                    <span>Pendataan</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Pendataan</h6>
-                        <a class="collapse-item {{ request()->is('kendaraan') ? 'active' : '' }}" href="/kendaraan">Data
-                            Kendaraan</a>
-                        <a class="collapse-item {{ request()->is('driver') ? 'active' : '' }}"
-                            href="/driver">Data Driver</a>
-                            <a class="collapse-item {{ request()->is('user') ? 'active' : '' }}" href="/user">Data
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                        aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fa-solid fa-file-waveform"></i>
+                        <span>Pendataan</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Pendataan</h6>
+                            <a class="collapse-item {{ request()->is('kendaraan') ? 'active' : '' }}" href="/kendaraan">Data
+                                Kendaraan</a>
+                            <a class="collapse-item {{ request()->is('driver') ? 'active' : '' }}"
+                                href="/driver">Data Driver</a>
+                            @if (Auth::user()->role == 'Control')
+                                <a class="collapse-item {{ request()->is('user') ? 'active' : '' }}" href="/user">Data
                                 Pengguna</a>
+                            @endif
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            @endif
 
 
             <!-- Divider -->
