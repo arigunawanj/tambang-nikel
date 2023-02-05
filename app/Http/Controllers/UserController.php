@@ -72,9 +72,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $user->update([
+            'role' => $request->role,
+        ]);
+
+        // Dialihkan ke halaman Pengguna
+        return redirect('user')->with('success', 'Berhasil Ubah Role Pengguna');
     }
 
     /**

@@ -48,26 +48,23 @@
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Edit Data Pengguna</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">Ubah Role Pengguna</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ route('driver.update', $item->id) }}" method="POST">
+                                            <form action="{{ route('user.update', $item->id) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="form-group">
-                                                    <label>Nama Driver</label>
-                                                    <input type="text" class="form-control" value="{{ $item->nama_driver }}" name="nama_driver">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Alamat Driver</label>
-                                                    <input type="text" class="form-control" value="{{ $item->alamat_driver }}" name="alamat_driver">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Telepon Distributor</label>
-                                                    <input type="text" class="form-control" value="{{ $item->telepon_driver }}" name="telepon_driver">
+                                                    <label>Role Pengguna</label>
+                                                    <select name="role" class="form-control" id="">
+                                                        <option value="Admin" @if ($item->role == 'Admin') @selected($item->role == 'Admin') @endif>Admin</option>
+                                                        <option value="Control"  @if ($item->role == "Control") @selected($item->role == "Control") @endif>Control</option>
+                                                        <option value="Manajer"  @if ($item->role == "Manajer") @selected($item->role == "Manajer") @endif>Manajer</option>
+                                                        <option value="Boss"  @if ($item->role == "Boss") @selected($item->role == "Boss") @endif>Boss</option>
+                                                    </select>
                                                 </div>
                                                 <button type="submit" class="btn btn-primary">Submit</button>
                                             </form>
@@ -87,11 +84,11 @@
                                                 <span aria-hidden="true">×</span>
                                             </button>
                                         </div>
-                                        <form action="{{ route('driver.destroy', $item->id) }}" method="POST">
+                                        <form action="{{ route('user.destroy', $item->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <div class="modal-body">
-                                                   <p>Apa anda yakin ingin menghapus data <span class="badge badge-danger">{{ $item->nama_driver }}</span> ?</p> 
+                                                   <p>Apa anda yakin ingin menghapus data <span class="badge badge-danger">{{ $item->nama }}</span> ?</p> 
                                                 <div class="modal-footer">
                                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                                                     <button type="submit" class="btn btn-danger">Hapus</button>
@@ -121,19 +118,36 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="POST">
+                    <form action="{{ route('user.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label>Nama Driver</label>
-                            <input type="text" class="form-control" name="nama_driver">
+                            <label>Nama Pengguna</label>
+                            <input type="text" class="form-control" name="nama">
                         </div>
                         <div class="form-group">
-                            <label>Alamat Driver</label>
-                            <input type="text" class="form-control" name="alamat_driver">
+                            <label>Alamat Pengguna</label>
+                            <input type="text" class="form-control" name="alamat">
                         </div>
                         <div class="form-group">
-                            <label>Telepon Driver</label>
-                            <input type="text" class="form-control" name="telepon_driver">
+                            <label>Username</label>
+                            <input type="text" class="form-control" name="username">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select name="role" class="form-control" id="">
+                                <option value="Admin">Admin</option>
+                                <option value="Control">Control</option>
+                                <option value="Manajer">Manajer</option>
+                                <option value="Boss">Boss</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" name="password">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

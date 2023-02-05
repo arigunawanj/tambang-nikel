@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DriverExport;
 use App\Models\Driver;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 class DriverController extends Controller
@@ -106,5 +108,10 @@ class DriverController extends Controller
     {
         $driver->delete();
         return redirect('driver')->with('success', 'Berhasil Hapus Data Driver');
+    }
+
+    public function driverExport() 
+    {
+        return Excel::download(new DriverExport, 'DriverExport.xlsx');
     }
 }

@@ -29,6 +29,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('riwayat', RiwayatController::class);
     Route::resource('sewa', SewaController::class);
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    // Print
+    Route::get('driverexport', [DriverController::class, 'driverExport']);
+    Route::get('kendaraanexport', [KendaraanController::class, 'kendaraanExport']);
     
 });
 Auth::routes();

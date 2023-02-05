@@ -8,6 +8,7 @@
     <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
         <i class="fas fa-fw fa-plus fa-beat-fade"></i> Tambah Data
     </button>
+    <a href="/driverexport" class="btn btn-warning mb-3"><i class="fa-solid fa-print"></i> Cetak Data</a>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
 use Illuminate\Http\Request;
+use App\Exports\KendaraanExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 class KendaraanController extends Controller
@@ -43,7 +45,6 @@ class KendaraanController extends Controller
             'konsumsi_bbm' => 'required',
             'jadwal' => 'required',
             'asal' => 'required',
-            'status' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -91,7 +92,6 @@ class KendaraanController extends Controller
             'konsumsi_bbm' => 'required',
             'jadwal' => 'required',
             'asal' => 'required',
-            'status' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -112,5 +112,10 @@ class KendaraanController extends Controller
     {
         $kendaraan->delete();
         return redirect('kendaraan')->with('success', 'Berhasil Hapus Data Kendaraan');
+    }
+
+    public function kendaraanExport() 
+    {
+        return Excel::download(new KendaraanExport, 'KendaraanExport.xlsx');
     }
 }

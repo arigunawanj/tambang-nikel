@@ -8,6 +8,7 @@
     <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
         <i class="fas fa-fw fa-plus fa-beat-fade"></i> Tambah Data
     </button>
+    <a href="/kendaraanexport" class="btn btn-warning mb-3"><i class="fa-solid fa-print"></i> Cetak Data</a>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -37,7 +38,11 @@
                                 <td>{{ $item->konsumsi_bbm }}</td>
                                 <td>{{ $item->jadwal }}</td>
                                 <td>{{ $item->asal }}</td>
-                                <td>{{ $item->status }}</td>
+                                @if ($item->status == 0)
+                                    <td><span class="badge badge-warning">Tersedia</span></td>
+                                @else
+                                    <td><span class="badge badge-danger">Disewakan</span></td>
+                                @endif
                                 <td class="d-flex">
                                     <a href="" class="btn btn-warning" data-toggle="modal"
                                         data-target="#editData{{ $item->id }}"><i class="fa-solid fa-pen-to-square"></i></a>
@@ -71,7 +76,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Konsumsi BBM</label>
-                                                    <input type="text" class="form-control" value="{{ $item->konsumsi_bbm }}" name="konsumsi_bbm">
+                                                    <input type="number" class="form-control" value="{{ $item->konsumsi_bbm }}" name="konsumsi_bbm">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Jadwal</label>
@@ -103,7 +108,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <div class="modal-body">
-                                                   <p>Apa anda yakin ingin menghapus data <span class="badge badge-danger">{{ $item->nama_driver }}</span> ?</p> 
+                                                   <p>Apa anda yakin ingin menghapus data <span class="badge badge-danger">{{ $item->nama_kendaraan }}</span> ?</p> 
                                                 <div class="modal-footer">
                                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                                                     <button type="submit" class="btn btn-danger">Hapus</button>
@@ -145,7 +150,7 @@
                         </div>
                         <div class="form-group">
                             <label>Konsumsi BBM</label>
-                            <input type="text" class="form-control" name="konsumsi_bbm">
+                            <input type="number" class="form-control" name="konsumsi_bbm">
                         </div>
                         <div class="form-group">
                             <label>Jadwal</label>
