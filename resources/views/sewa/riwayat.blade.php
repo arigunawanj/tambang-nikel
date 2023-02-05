@@ -17,7 +17,6 @@
                             <th>No</th>
                             <th>Tanggal Pakai</th>
                             <th>Nama Kendaraan</th>
-                            <th>Sewa</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -27,9 +26,12 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->tanggal_pakai }}</td>
-                                <td>{{ $item->kendaraan_id }}</td>
-                                <td>{{ $item->sewa_id }}</td>
-                                <td>{{ $item->status }}</td>
+                                <td>{{ $item->kendaraan->nama_kendaraan }}</td>
+                                @if ($item->status == 0)
+                                    <td><a href="sewakan/{{ $item->id }}" class="badge badge-success">Disewakan</a></td>
+                                @else
+                                    <td><span class="badge badge-info">Selesai disewakan</span></td>
+                                @endif
                                 <td class="d-flex">
                                     <a href="" class="btn btn-danger ml-2" data-toggle="modal"
                                     data-target="#delData{{ $item->id }}"><i class="fa-solid fa-trash"></i></a>
@@ -48,7 +50,7 @@
                                                 <span aria-hidden="true">×</span>
                                             </button>
                                         </div>
-                                        <form action="{{ route('driver.destroy', $item->id) }}" method="POST">
+                                        <form action="{{ route('riwayat.destroy', $item->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <div class="modal-body">

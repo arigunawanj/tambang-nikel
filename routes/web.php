@@ -5,6 +5,7 @@ use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\SewaController;
 use App\Http\Controllers\UserController;
+use App\Models\Riwayat;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('acc1/{sewa}', [SewaController::class, 'acc_1']);
     Route::get('acc2/{sewa}', [SewaController::class, 'acc_2']);
+    Route::get('sewakan/{riwayat}', [RiwayatController::class, 'sewakan']);
 
     // Print
     Route::get('driverexport', [DriverController::class, 'driverExport']);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Riwayat;
+use App\Models\Kendaraan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -37,19 +38,7 @@ class RiwayatController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'tanggal_pakai' => 'required',
-            'kendaraan_id' => 'required',
-            'sewa_id' => 'required',
-            'status' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect('kendaraan')->with('error', 'Gagal Tambah Kendaraan');
-        } else {
-            Riwayat::create($request->all());
-            return redirect('kendaraan')->with('success', 'Berhasil Tambah Kendaraan');
-        }
+       //
     }
 
     /**
@@ -95,6 +84,25 @@ class RiwayatController extends Controller
     public function destroy(Riwayat $riwayat)
     {
         $riwayat->delete();
-        return redirect('riwayat')->with('success', 'Berhasil Hapus Data Driver');
+        return redirect('riwayat')->with('success', 'Berhasil Hapus Riwayat Peminjaman');
+    }
+
+    public function sewakan(Riwayat $riwayat)
+    {
+        $kendaraan = Kendaraan::findOrFail($riwayat->kendaraan_id);
+        if($riwayat->status == 0) {
+            $riwayat->update([
+                'status' => 1,
+            ]);
+            $kendaraan->update([
+                'status' => 0,
+            ]);
+
+        } else {
+            $riwayat->update([
+                'status' => 0,
+            ]);
+        }
+        return redirect('riwayat')->with('success', 'Data Berhasil disetujui');
     }
 }

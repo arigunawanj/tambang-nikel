@@ -61,7 +61,7 @@ class SewaController extends Controller
             $data['acc_1'] = 0;
             $data['acc_2'] = 0;
             Sewa::create($data);
-            return redirect('sewa')->with('success', 'Berhasil Tambah Sewa');
+            return redirect('sewa')->with('success', 'Berhasil Tambah Sewa Kendaraan');
         }
     }
 
@@ -127,6 +127,7 @@ class SewaController extends Controller
 
     public function acc_2(Sewa $sewa)
     {
+        $kendaraan = Kendaraan::findOrFail($sewa->kendaraan_id);
         if($sewa->acc_1 == 1){
             if($sewa->acc_2 == 0) {
                 $sewa->update([
@@ -137,6 +138,10 @@ class SewaController extends Controller
                     'kendaraan_id' => $sewa->kendaraan_id,
                     'sewa_id' => $sewa->id,
                     'status' => 0,
+                ]);
+
+                $kendaraan->update([
+                    'status' => 1,
                 ]);
             } else {
                 $sewa->update([
