@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Driver;
+use App\Models\Kendaraan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -23,6 +26,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $kendaraan = Kendaraan::all()->count();
+        $driver = Driver::all()->count();
+        return view('home', compact('kendaraan','driver'));
+    }
+
+    public function chart()
+    {
+        $riwayat = DB::table('riwayats')
+        ->orderBy('tanggal_pakai', 'ASC')
+        ->get();
+
+        return response()->json($riwayat);
     }
 }

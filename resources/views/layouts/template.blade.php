@@ -276,6 +276,10 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('data/js/demo/datatables-demo.js') }}"></script>
     <script src="{{ asset('data/js/harga.js') }}"></script>
+    
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
     <script>
         @if (Session::has('success'))
             toastr.success("{{ Session::get('success') }}")
@@ -283,6 +287,45 @@
             toastr.error("{{ Session::get('error') }}")
         @endif
     </script>
+    <script>
+        window.onload = function() {
+        
+        var dataPoints = [];
+        
+        var chart = new CanvasJS.Chart("chartku", {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+                text: "Riwayat Peminjaman"
+            },
+            axisY: {
+                title: "Status",
+                titleFontSize: 22,
+                includeZero: true
+            },
+            data: [{
+                type: "column",
+                yValueFormatString: "#,### Terpakai",
+                dataPoints: dataPoints
+            }]
+        });
+        
+        function addData(data) {
+            for (var i = 0; i < data.length; i++) {
+                dataPoints.push({
+                    x: new Date(data[i].tanggal_pakai),
+                    y: data[i].status
+                });
+            }
+            chart.render();
+        
+        }
+        
+        $.getJSON("http://127.0.0.1:8000/datariwayat", addData);
+        
+        }
+</script>
 </body>
 
 </html>
+
