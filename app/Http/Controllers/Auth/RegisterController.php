@@ -53,10 +53,13 @@ class RegisterController extends Controller
             'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required'],
-            'nama' => ['required'],
-            'alamat' => ['required'],
         ]);
+    }
+    public function showRegistrationForm()
+
+    {
+        return view('auth.register1');
+
     }
 
     /**
@@ -71,9 +74,9 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role' => Hash::make($data['role']),
-            'nama' => Hash::make($data['nama']),
-            'alamt' => Hash::make($data['alamat']),
+            'nama' => $data['nama'],
+            'alamat' => $data['alamat'],
         ]);
     }
+
 }
