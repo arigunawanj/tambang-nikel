@@ -34,54 +34,48 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->tanggal_sewa }}</td>
-                                <td>{{ $item->kendaraan_id }}</td>
-                                <td>{{ $item->driver_id}}</td>
-                                <td>{{ $item->penyetuju_1 }}</td>
-                                <td>{{ $item->penyetuju_2 }}</td>
-                                <td>{{ $item->acc_1 }}</td>
-                                <td>{{ $item->acc_2 }}</td>
+                                <td>{{ $item->kendaraan->nama_kendaraan }}</td>
+                                <td>{{ $item->driver->nama_driver}}</td>
+                                @php
+                                    $pen1 = DB::table('users')->join('sewas', 'users.id', '=', 'sewas.penyetuju_1')->where('penyetuju_1', '=', $item->penyetuju_1)->get();
+                                @endphp
+                                    @foreach ($pen1 as $nama)
+                                        <td>{{ $nama->nama }}</td>
+                                    @endforeach
+
+                                @php
+                                    $pen2 = DB::table('users')->join('sewas', 'users.id', '=', 'sewas.penyetuju_2')->where('penyetuju_2', '=', $item->penyetuju_2)->get();
+                                @endphp
+                                    @foreach ($pen2 as $nama2)
+                                        <td>{{ $nama2->nama }}</td>
+                                    @endforeach
+
+                                @if ($item->acc_1 == 0)
+                                    @if (Auth::user()->id == $item->penyetuju_1)
+                                        <td><a href="acc1/{{ $item->id }}" class="btn btn-sm btn-danger">Belum Disetujui</a></td>
+                                    @else
+                                        <td><span class="badge badge-danger">Belum Disetujui</span></td>
+                                    @endif
+                                @else
+                                    <td><span class="badge badge-warning">Disetujui</span></td>
+                                @endif
+
+                                @if ($item->acc_2 == 0)
+                                    @if (Auth::user()->id == $item->penyetuju_2)
+                                        <td><a href="acc2/{{ $item->id }}" class="btn btn-sm btn-danger">Belum Disetujui</a></td>
+                                    @else
+                                        <td><span class="badge badge-danger">Belum Disetujui</span></td>
+                                    @endif
+                                @else
+                                    <td><span class="badge badge-warning">Disetujui</span></td>
+                                @endif
                                 <td class="d-flex">
-                                    <a href="" class="btn btn-warning" data-toggle="modal"
-                                        data-target="#editData{{ $item->id }}"><i class="fa-solid fa-pen-to-square"></i></a>
                                     <a href="" class="btn btn-danger ml-2" data-toggle="modal"
                                     data-target="#delData{{ $item->id }}"><i class="fa-solid fa-trash"></i></a>
                                 </td>
 
                             </tr>
-                            <!-- Modal -->
-                            <div class="modal fade" id="editData{{ $item->id }}" tabindex="-1" role="dialog"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Edit Sewa Kendaraan</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="{{ route('driver.update', $item->id) }}" method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <div class="form-group">
-                                                    <label>Nama Driver</label>
-                                                    <input type="text" class="form-control" value="{{ $item->nama_driver }}" name="nama_driver">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Alamat Driver</label>
-                                                    <input type="text" class="form-control" value="{{ $item->alamat_driver }}" name="alamat_driver">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Telepon Distributor</label>
-                                                    <input type="text" class="form-control" value="{{ $item->telepon_driver }}" name="telepon_driver">
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                              <!-- Modal Edit Akhir-->
+                           
                              <!-- Modal Delete-->
                                 <div class="modal fade" id="delData{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                                 aria-hidden="true">
@@ -93,7 +87,7 @@
                                                 <span aria-hidden="true">×</span>
                                             </button>
                                         </div>
-                                        <form action="{{ route('driver.destroy', $item->id) }}" method="POST">
+                                        <form action="{{ route('sewa.destroy', $item->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <div class="modal-body">
@@ -127,19 +121,47 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="POST">
+                    <form action="{{ route('sewa.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
+                            <label>Tanggal Sewa</label>
+                            <input type="date" class="form-control" name="tanggal_sewa">
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Kendaraan</label>
+                            <select name="kendaraan_id" id="" class="form-control" required>
+                                <option value="" disabled selected>Pilih Nama Kendaraan...</option>
+                                @foreach ($kendaraan as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_kendaraan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label>Nama Driver</label>
-                            <input type="text" class="form-control" name="nama_driver">
+                            <select name="driver_id" id="" class="form-control" required>
+                                <option value="" disabled selected>Pilih Nama Driver...</option>
+                                @foreach ($driver as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_driver }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label>Alamat Driver</label>
-                            <input type="text" class="form-control" name="alamat_driver">
+                            <label>Penyetuju 1</label>
+                            <select name="penyetuju_1" id="" class="form-control" required>
+                                <option value="" disabled selected>Pilih Penyetuju 1...</option>
+                                @foreach ($user as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama }} - {{ $item->role }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label>Telepon Driver</label>
-                            <input type="text" class="form-control" name="telepon_driver">
+                            <label>Penyetuju 2</label>
+                            <select name="penyetuju_2" id="" class="form-control" required>
+                                <option value="" disabled selected>Pilih Penyetuju 2...</option>
+                                @foreach ($user as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama }} - {{ $item->role }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

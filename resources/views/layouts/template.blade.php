@@ -51,6 +51,11 @@
                     <i class="fas fa-fw fa-house-user"></i>
                     <span>Beranda</span></a>
             </li>
+            <li class="nav-item {{ request()->is('activity') ? 'active' : '' }}">
+                <a class="nav-link" href="/activity">
+                    <i class="fa-solid fa-shoe-prints"></i>
+                    <span>Log Aktivitas</span></a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -167,6 +172,10 @@
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
 
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa-solid fa-user"></i>
+                                    {{ Auth::user()->nama }}
+                                </a>
                                 <a class="dropdown-item" href="#" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

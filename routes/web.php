@@ -29,6 +29,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('riwayat', RiwayatController::class);
     Route::resource('sewa', SewaController::class);
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('acc1/{sewa}', [SewaController::class, 'acc_1']);
+    Route::get('acc2/{sewa}', [SewaController::class, 'acc_2']);
 
     // Print
     Route::get('driverexport', [DriverController::class, 'driverExport']);

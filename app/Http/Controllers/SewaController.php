@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Driver;
+use App\Models\Kendaraan;
+use App\Models\Riwayat;
 use App\Models\Sewa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class SewaController extends Controller
@@ -16,7 +20,10 @@ class SewaController extends Controller
     public function index()
     {
         $sewa = Sewa::all();
-        return view('sewa.sewa', compact('sewa'));
+        $kendaraan = Kendaraan::all();
+        $driver = Driver::all();
+        $user = DB::table('users')->whereIn('role', ['Boss', 'Manajer'])->get();
+        return view('sewa.sewa', compact('sewa', 'kendaraan', 'driver','user'));
     }
 
     /**
@@ -37,21 +44,24 @@ class SewaController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $data = $request->all();
+        $validator = Validator::make($data, [
             'tanggal_sewa' => 'required',
             'kendaraan_id' => 'required',
             'driver_id' => 'required',
             'penyetuju_1' => 'required',
             'penyetuju_2' => 'required',
-            'acc1' => 'required',
-            'acc2' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return redirect('kendaraan')->with('error', 'Gagal Tambah Kendaraan');
+            return redirect('sewa')->with('error', 'Gagal Tambah Sewa');
+        } elseif($request->penyetuju_1 == $request->penyetuju_2) {
+            return redirect('sewa')->with('error', 'Penyetuju tidak boleh sama !');
         } else {
-            Sewa::create($request->all());
-            return redirect('kendaraan')->with('success', 'Berhasil Tambah Kendaraan');
+            $data['acc_1'] = 0;
+            $data['acc_2'] = 0;
+            Sewa::create($data);
+            return redirect('sewa')->with('success', 'Berhasil Tambah Sewa');
         }
     }
 
@@ -98,6 +108,44 @@ class SewaController extends Controller
     public function destroy(Sewa $sewa)
     {
         $sewa->delete();
-        return redirect('sewa')->with('success', 'Berhasil Hapus Data Driver');
+        return redirect('sewa')->with('success', 'Berhasil Hapus Data Sewa');
+    }
+
+    public function acc_1(Sewa $sewa)
+    {
+        if($sewa->acc_1 == 0) {
+            $sewa->update([
+                'acc_1' => 1,
+            ]);
+        } else {
+            $sewa->update([
+                'acc_1' => 0,
+            ]);
+        }
+        return redirect('sewa')->with('success', 'Data Berhasil disetujui');
+    }
+
+    public function acc_2(Sewa $sewa)
+    {
+        if($sewa->acc_1 == 1){
+            if($sewa->acc_2 == 0) {
+                $sewa->update([
+                    'acc_2' => 1,
+                ]);
+                Riwayat::create([
+                    'tanggal_pakai' => $sewa->tanggal_sewa,
+                    'kendaraan_id' => $sewa->kendaraan_id,
+                    'sewa_id' => $sewa->id,
+                    'status' => 0,
+                ]);
+            } else {
+                $sewa->update([
+                    'acc_2' => 0,
+                ]);
+            }
+        return redirect('sewa')->with('success', 'Data berhasil disetujui');
+        } else {
+        return redirect('sewa')->with('error', 'Menunggu Disetujui Pihak 1');
+        }
     }
 }
