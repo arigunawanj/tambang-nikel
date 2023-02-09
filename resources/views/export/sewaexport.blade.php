@@ -33,7 +33,7 @@
                     @endforeach
 
                 @if ($item->acc_1 == 0)
-                        <td><span class="badge badge-danger">Belum Disetujui</span></td>
+                    <td><span class="badge badge-danger">Belum Disetujui</span></td>
                 @else
                     <td><span class="badge badge-warning">Disetujui</span></td>
                 @endif

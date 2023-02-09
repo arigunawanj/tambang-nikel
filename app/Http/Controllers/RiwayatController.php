@@ -98,26 +98,39 @@ class RiwayatController extends Controller
 
     public function sewakan(Riwayat $riwayat)
     {
+        // Mencari ID kendaraan dengan tabel riwayat kendaraan ID
         $kendaraan = Kendaraan::findOrFail($riwayat->kendaraan_id);
+
+        // Jika status dalam riwayat bernilai 0 (Disewakan)
         if($riwayat->status == 0) {
+
+            // Riwayat akan mengupdate menjadi 1 (Selesai Disewakan)
             $riwayat->update([
                 'status' => 1,
             ]);
+
+            // Status dalam tabel kendaraan akan dikembalikan menjadi 0 (Tersedia)
             $kendaraan->update([
                 'status' => 0,
             ]);
 
+            // Log Aktivitas akan membentuk data 
             Activity::create([
                 'nama' => 'Riwayat Pemakaian selesai',
                 'deskripsi' => 'Riwayat Pemakaian Kendaraan telah selesai' ,
                 'user_id' => Auth::user()->id,
                 'waktu' => Carbon::now(),
             ]);
+
+            // Selain itu
         } else {
+            // Status dalam riwayat akan diupdate kembali menjadi 0
             $riwayat->update([
                 'status' => 0,
             ]);
         }
+
+        // Redirect ke halaman riwayat dengan membawa sesi success
         return redirect('riwayat')->with('success', 'Pemakaian telah selesai');
     }
 }

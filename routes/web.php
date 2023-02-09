@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('driver', DriverController::class);
     Route::resource('kendaraan', KendaraanController::class);
     Route::get('sewakan/{riwayat}', [RiwayatController::class, 'sewakan']);
+
+    // Chart
     Route::get('datariwayat', [HomeController::class,'chart']);
         // Print
         Route::get('driverexport', [DriverController::class, 'driverExport']);

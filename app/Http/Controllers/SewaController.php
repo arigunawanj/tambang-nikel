@@ -134,33 +134,51 @@ class SewaController extends Controller
 
     public function acc_1(Sewa $sewa)
     {
+        // Jika ACC 1 bernilai boolean 0 (Belum Disetujui)
         if($sewa->acc_1 == 0) {
+            // ACC 1 akan diupdate menjadi Disetujui
             $sewa->update([
                 'acc_1' => 1,
             ]);
+
+            // Log Aktivitas akan membentuk Data
             Activity::create([
                 'nama' => 'Sewa Kendaraan disetujui',
                 'deskripsi' => 'Sewa disetujui oleh ' . Auth::user()->nama,
                 'user_id' => Auth::user()->id,
                 'waktu' => Carbon::now(),
             ]);
+
+            // Selain itu
         } else {
+            // ACC 1 bisa diupdate kembali menjadi 0 (Belum disetujui)
             $sewa->update([
                 'acc_1' => 0,
             ]);
             
         }
+
+        // Redirect ke halaman sewa dengan membawa sesi Success
         return redirect('sewa')->with('success', 'Data Berhasil disetujui');
     }
 
     public function acc_2(Sewa $sewa)
     {
+        // Mencari ID melalui Tabel sewa - Kendaraan ID
         $kendaraan = Kendaraan::findOrFail($sewa->kendaraan_id);
+
+        // Jika ACC 1 bernilai boolean 1 (Disetujui)
         if($sewa->acc_1 == 1){
+
+            // Dan jika ACC 2 bernilai boolean 0 (Belum disetujui)
             if($sewa->acc_2 == 0) {
+
+                // Update ACC 2 menjadi disetujui
                 $sewa->update([
                     'acc_2' => 1,
                 ]);
+
+                // Data riwayat akan diisi dengan data Sewa
                 Riwayat::create([
                     'tanggal_pakai' => $sewa->tanggal_sewa,
                     'kendaraan_id' => $sewa->kendaraan_id,
@@ -168,6 +186,7 @@ class SewaController extends Controller
                     'status' => 0,
                 ]);
 
+                // Log Aktivitas juga akan dibuat
                 Activity::create([
                     'nama' => 'Sewa Kendaraan disetujui',
                     'deskripsi' => 'Sewa disetujui oleh ' . Auth::user()->nama ,
@@ -175,17 +194,26 @@ class SewaController extends Controller
                     'waktu' => Carbon::now(),
                 ]);
 
+                // Status Kendaraan pada Data kendaraan juga akan Update menjadi Disewakan
                 $kendaraan->update([
                     'status' => 1,
                 ]);
+                
+                // Selain itu
             } else {
+                // ACC 2 diubah lagi menjadi Belum disetujui
                 $sewa->update([
                     'acc_2' => 0,
                 ]);
             }
-        return redirect('sewa')->with('success', 'Data berhasil disetujui');
+            
+            // Redirect ke halaman sewa dengan membawa Sesi Success
+            return redirect('sewa')->with('success', 'Data berhasil disetujui');
+        
+            // Jika ACC 1 bernilai boolean 0 (Belum disetujui)
         } else {
-        return redirect('sewa')->with('error', 'Menunggu Disetujui Pihak 1');
+            // Redirect ke halaman sewa dengan membawa sesi error
+            return redirect('sewa')->with('error', 'Menunggu Disetujui Pihak 1');
         }
     }
 
