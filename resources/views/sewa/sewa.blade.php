@@ -48,15 +48,16 @@
                                 <td>{{ $item->kendaraan->nama_kendaraan }}</td>
                                 <td>{{ $item->driver->nama_driver}}</td>
                                 @php
-                                    $pen1 = DB::table('users')->join('sewas', 'users.id', '=', 'sewas.penyetuju_1')->where('penyetuju_1', '=', $item->penyetuju_1)->get();
+                                    $pen1 = DB::table('users')->where('users.id', '=', $item->penyetuju_1)->get();
                                 @endphp
                                     @foreach ($pen1 as $nama)
                                         <td>{{ $nama->nama }}</td>
                                     @endforeach
-
+                                    
                                 @php
-                                    $pen2 = DB::table('users')->join('sewas', 'users.id', '=', 'sewas.penyetuju_2')->where('penyetuju_2', '=', $item->penyetuju_2)->get();
+                                    $pen2 = DB::table('users')->where('users.id', '=', $item->penyetuju_2)->get();
                                 @endphp
+
                                     @foreach ($pen2 as $nama2)
                                         <td>{{ $nama2->nama }}</td>
                                     @endforeach
@@ -80,6 +81,7 @@
                                 @else
                                     <td><span class="badge badge-warning">Disetujui</span></td>
                                 @endif
+
                                 @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
                                 <td class="d-flex">
                                     <a href="" class="btn btn-danger ml-2" data-toggle="modal"
