@@ -6,11 +6,14 @@
     <h1 class="h3 mb-2 text-gray-800">Data Driver</h1>
 
     @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Control')
-        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#tambahData">
             <i class="fas fa-fw fa-plus fa-beat-fade"></i> Tambah Data
         </button>
     @endif
     <a href="/driverexport" class="btn btn-warning mb-3"><i class="fa-solid fa-print"></i> Cetak Data</a>
+    <button type="button" class="btn btn-danger mb-3" data-toggle="modal" data-target="#importData">
+        <i class="fas fa-fw fa-plus fa-beat-fade"></i> Import Data Driver
+    </button>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -111,7 +114,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="tambahData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -142,4 +145,30 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="importData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Import Data Driver</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('importdriver') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group mb-3">
+                            <input type="file" name="file" class="form-control" id="">
+                          </div>
+                          <div class="form-group mb-3 d-grid">
+                            <button type="submit" class="btn btn-warning">Import</button>
+                          </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection

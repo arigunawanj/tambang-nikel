@@ -7,6 +7,7 @@ use App\Models\Driver;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Exports\DriverExport;
+use App\Imports\DriverImport;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
@@ -135,5 +136,12 @@ class DriverController extends Controller
     public function driverExport() 
     {
         return Excel::download(new DriverExport, 'DriverExport.xlsx');
+    }
+
+    public function driverImport(Request $request)
+    {
+        $file = $request->file('file');
+        Excel::import(new DriverImport, $file);
+        return redirect('driver')->with('success', 'Berhasil');
     }
 }

@@ -48,6 +48,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('datariwayat', [HomeController::class,'chart']);
         // Print
         Route::get('driverexport', [DriverController::class, 'driverExport']);
+        Route::post('driverimport', [DriverController::class, 'driverImport'])->name('importdriver');
+
         Route::get('kendaraanexport', [KendaraanController::class, 'kendaraanExport']);
         Route::get('sewaexport', [SewaController::class, 'sewaExport']);
 });
